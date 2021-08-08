@@ -11,6 +11,8 @@ let olympicsMedalTable = [
     { id: 10, country: "QUÊNIA", gold: 6, silver: 6, bronze: 1, continent: "AFRICA" },
 ];
 
+// métodos desenvolvidos para aplicações mais comuns, não são tão robustos quanto os originais.
+
 Array.prototype.customFind = function (predicate) {
     for (let i = 0; i < this.length; i++) {
         if (predicate(this[i])) {
@@ -76,7 +78,7 @@ console.log(`Resultado custom - Medalhas de Ouro no continente Asiático: ${resu
 /* DESAFIOS - CONCLUA AS FUNÇÕES customSome, customFind E UTILIZANDO TODAS AS FUNÇÕES 'CUSTOM' CONCLUA OS DESAFIOS ABAIXO: */
 
 // 1 - Crie um algoritmo que encontre o único pais do continente Africano
-const paisAfricano = olympicsMedalTable.customFind(x => x.continent === 'AFRICA');
+const paisAfricano = olympicsMedalTable.customFind(x => x.continent === 'AFRICA').country;
 console.log(paisAfricano);
 
 // 2 - Crie um algoritmo que retorne o total de medalhas por país
@@ -86,26 +88,32 @@ const medalhasPorPais = olympicsMedalTable.customMap(x => {
 console.log(medalhasPorPais);
 
 // 3 - Crie um algoritmo para encontrar os países que conquistaram mais que 10 medalhas de ouro
-// OBS: Considerei o que foi pedido no enunciado (que não está 100% de acordo caso seja levado em conta o nome da variável)
-const paisesCom10MedalhasOuroNoMinimo = olympicsMedalTable.customSome(x => x.gold > 10) ? olympicsMedalTable.customFilter(x => x.gold >= 10) : "Nenhum país conquistou 10 medalhas de ouro";
-console.log(paisesCom10MedalhasOuroNoMinimo);
+// OBS: Considerei o que foi pedido no enunciado em vez do nome antigo da variável.
+const paisesComMaisDe10MedalhasOuro = olympicsMedalTable.customSome(x => x.gold > 10) ?
+    olympicsMedalTable.customFilter(x => x.gold >= 10) :
+    "Nenhum país conquistou mais que 10 medalhas de ouro";
+console.log(paisesComMaisDe10MedalhasOuro);
 
 // 4 - Crie um algoritmo para encontrar os países que conquistaram no minímo 30 medalhas (Ouro, Prata e Bronze)
-const paisesCom30MedalhasNoMinimo = olympicsMedalTable.customReduce((acc, x) => {
-    const medalhas = x.gold + x.silver + x.bronze;
-    if (medalhas >= 30) {
-        acc.push({ pais: x.country, medalhas: medalhas });
-    }
-    return acc;
-}, []);
+const paisesCom30MedalhasNoMinimo = olympicsMedalTable.some(x => x.gold + x.silver + x.bronze >= 30) ?
+    olympicsMedalTable.customReduce((acc, x) => {
+        const medalhas = x.gold + x.silver + x.bronze;
+        if (medalhas >= 30) {
+            acc.push({ pais: x.country, medalhas: medalhas });
+        }
+        return acc;
+    }, []) :
+    "Nenhum país conquistou 30 medalhas";
 console.log(paisesCom30MedalhasNoMinimo);
 
 // 5 - Crie um algoritmo para verificar se o continente América do Sul conquistou pelo menos 20 medalhas de ouro
-// OBS: Considerei o que foi pedido no enunciado (que não está 100% de acordo caso seja levado em conta o nome da variável)
-const paisesComPeloMenos20MedalhasDeOUro = olympicsMedalTable.customReduce((acc, x) => {
+// OBS: Considerei o que foi pedido no enunciado em vez do nome antigo da variável.
+const americaDoSulTemPeloMenos20MedalhasDeOUro = olympicsMedalTable.customReduce((acc, x) => {
     if (x.continent === 'AMERICA DO SUL') {
         acc += x.gold;
     }
     return acc;
-}) >= 20 ? "A América do Sul conquistou 20 ou mais medalhas de ouro" : "A América do Sul não conquistou 20 medalhas de ouro";
-console.log(paisesComPeloMenos20MedalhasDeOUro);
+}) >= 20 ?
+    "A América do Sul conquistou 20 ou mais medalhas de ouro" :
+    "A América do Sul não conquistou 20 medalhas de ouro";
+console.log(americaDoSulTemPeloMenos20MedalhasDeOUro);
