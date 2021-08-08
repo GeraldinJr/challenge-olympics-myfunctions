@@ -79,20 +79,22 @@ console.log(`Resultado custom - Medalhas de Ouro no continente Asiático: ${resu
 
 // 1 - Crie um algoritmo que encontre o único pais do continente Africano
 const paisAfricano = olympicsMedalTable.customFind(x => x.continent === 'AFRICA').country;
-console.log(paisAfricano);
+console.log(`Único país africano: ${paisAfricano}`);
 
 // 2 - Crie um algoritmo que retorne o total de medalhas por país
 const medalhasPorPais = olympicsMedalTable.customMap(x => {
     return { pais: x.country, medalhas: x.bronze + x.gold + x.silver };
 });
-console.log(medalhasPorPais);
+console.log(`Medalhas por país: `, medalhasPorPais);
 
 // 3 - Crie um algoritmo para encontrar os países que conquistaram mais que 10 medalhas de ouro
 // OBS: Considerei o que foi pedido no enunciado em vez do nome antigo da variável.
 const paisesComMaisDe10MedalhasOuro = olympicsMedalTable.customSome(x => x.gold > 10) ?
-    olympicsMedalTable.customFilter(x => x.gold >= 10) :
+    olympicsMedalTable.customFilter(x => x.gold >= 10).customMap(x => {
+        return { pais: x.country, medalhasDeOuro: x.gold };
+    }) :
     "Nenhum país conquistou mais que 10 medalhas de ouro";
-console.log(paisesComMaisDe10MedalhasOuro);
+console.log(`Países com mais de 10 medalhas de ouro: `, paisesComMaisDe10MedalhasOuro);
 
 // 4 - Crie um algoritmo para encontrar os países que conquistaram no minímo 30 medalhas (Ouro, Prata e Bronze)
 const paisesCom30MedalhasNoMinimo = olympicsMedalTable.some(x => x.gold + x.silver + x.bronze >= 30) ?
@@ -104,7 +106,7 @@ const paisesCom30MedalhasNoMinimo = olympicsMedalTable.some(x => x.gold + x.silv
         return acc;
     }, []) :
     "Nenhum país conquistou 30 medalhas";
-console.log(paisesCom30MedalhasNoMinimo);
+console.log(`Países que consquistaram 30 ou mais medalhas : `, paisesCom30MedalhasNoMinimo);
 
 // 5 - Crie um algoritmo para verificar se o continente América do Sul conquistou pelo menos 20 medalhas de ouro
 // OBS: Considerei o que foi pedido no enunciado em vez do nome antigo da variável.
@@ -114,6 +116,6 @@ const americaDoSulTemPeloMenos20MedalhasDeOUro = olympicsMedalTable.customReduce
     }
     return acc;
 }) >= 20 ?
-    "A América do Sul conquistou 20 ou mais medalhas de ouro" :
-    "A América do Sul não conquistou 20 medalhas de ouro";
+    "A América do Sul conquistou 20 ou mais medalhas de ouro." :
+    "A América do Sul não conquistou 20 medalhas de ouro.";
 console.log(americaDoSulTemPeloMenos20MedalhasDeOUro);
